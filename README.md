@@ -239,7 +239,8 @@ src/
 │
 ├── infrastructure/
 │   └── database/
-│       └── database.module.ts
+│       ├── database.module.ts
+│       └── mongoose.config.ts
 │
 ├── common/
 │   ├── constants/
@@ -394,12 +395,35 @@ Cấu hình mẫu:
 NODE_ENV=development
 PORT=3000
 
-MONGODB_URI=mongodb://localhost:27017/nest_article_db
+MONGODB_URI=mongodb://127.0.0.1:27017/article_management
+MONGODB_MAX_POOL_SIZE=10
+MONGODB_MIN_POOL_SIZE=1
 
 CORS_ORIGINS=http://localhost:5173
 ```
 
 Không commit file `.env` lên Git.
+
+`MONGODB_URI` là nguồn cấu hình duy nhất cho địa chỉ kết nối và database name. `DatabaseModule` dùng `MongooseModule.forRootAsync()` cùng `ConfigService.getOrThrow()`; cấu hình giới hạn thời gian chọn server ở 5 giây, retry tối đa 3 lần và chỉ tự tạo index ngoài production. Pool mặc định từ 1 đến 10 connection và có thể điều chỉnh bằng hai biến môi trường trên.
+
+### MongoDB local
+
+Máy phát triển cần có MongoDB lắng nghe tại `127.0.0.1:27017`, hoặc thay `MONGODB_URI` bằng URI phù hợp trong file `.env` cục bộ. Repository hiện chưa kèm Docker Compose vì Docker CLI không có trong môi trường thiết lập; không đưa credential production vào source code.
+
+Nếu MongoDB không chạy, ứng dụng dừng khởi động sau số lần retry hữu hạn và log thông báo kết nối thất bại mà không in connection string. Hãy khởi động MongoDB, kiểm tra `MONGODB_URI`, rồi chạy lại backend.
+
+### MongoDB persistence structure
+
+Kết nối dùng chung được quản lý tại `src/infrastructure/database`. Trong mỗi business module:
+
+```text
+domain/repositories/                         Repository abstraction
+infrastructure/persistence/mongoose/schemas Mongoose schema
+infrastructure/persistence/mongoose/mappers Chuyển document ↔ domain entity
+infrastructure/persistence/mongoose/repositories Repository implementation
+```
+
+Schema sử dụng timestamps, không lưu `__v`, và giữ `ObjectId` trong persistence trong khi domain/HTTP sử dụng ID dạng string. Các lỗi duplicate key, validation, cast ObjectId và document not found được chuyển thành HTTP response an toàn bởi global exception filter.
 
 ---
 

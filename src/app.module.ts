@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
+import { DomainExceptionFilter } from './common/filters/domain-exception.filter';
 import { validateEnv } from './config/env.validation';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { ArticleModule } from './modules/article/article.module';
@@ -18,5 +20,6 @@ import { SubKeywordModule } from './modules/sub-keyword/sub-keyword.module';
     SubKeywordModule,
     ArticleModule,
   ],
+  providers: [{ provide: APP_FILTER, useClass: DomainExceptionFilter }],
 })
 export class AppModule {}

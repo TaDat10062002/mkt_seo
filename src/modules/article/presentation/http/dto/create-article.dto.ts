@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsMongoId, IsOptional, IsString } from 'class-validator';
 export class CreateArticleDto {
 
-  @ApiProperty() @IsString() companyId!: string;
+  @ApiProperty() @IsMongoId() companyId!: string;
 
-  @ApiProperty() @IsString() domainId!: string;
+  @ApiProperty() @IsMongoId() domainId!: string;
 
-  @ApiProperty() @IsString() keywordId!: string;
+  @ApiProperty() @IsMongoId() keywordId!: string;
   @IsOptional()
-  @ApiProperty({ required: false }) @IsString() subKeywordId?: string;
+  @ApiProperty({ required: false }) @IsMongoId() subKeywordId?: string;
 
   @ApiProperty() @IsString() title!: string;
 

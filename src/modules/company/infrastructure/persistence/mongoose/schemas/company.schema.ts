@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-@Schema({ timestamps: true, collection: 'companies' })
+@Schema({ timestamps: true, versionKey: false, collection: 'companies' })
 export class CompanyDocument {
   @Prop({ required: true, trim: true }) name!: string;
   @Prop({ required: false, trim: true }) description?: string;

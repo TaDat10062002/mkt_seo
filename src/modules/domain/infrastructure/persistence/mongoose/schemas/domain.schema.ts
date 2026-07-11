@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
-@Schema({ timestamps: true, collection: 'domains' })
+@Schema({ timestamps: true, versionKey: false, collection: 'domains' })
 export class DomainDocument {
   @Prop({ type: MongooseSchema.Types.ObjectId, required: true, index: true }) companyId!: Types.ObjectId;
   @Prop({ required: true, trim: true }) name!: string;

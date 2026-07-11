@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 export class CreateSubKeywordDto {
 
-  @ApiProperty() @IsString() keywordId!: string;
+  @ApiProperty() @IsMongoId() keywordId!: string;
 
   @ApiProperty() @IsString() name!: string;
 
