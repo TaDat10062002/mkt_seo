@@ -1,9 +1,27 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { DomainService } from './application/domain.service';
-import { DomainRepositoryToken } from './domain/repositories/domain.repository';
-import { MongooseDomainRepository } from './infrastructure/persistence/mongoose/repositories/mongoose-domain.repository';
-import { DomainDocument, DomainSchema } from './infrastructure/persistence/mongoose/schemas/domain.schema';
-import { DomainController } from './presentation/http/domain.controller';
-@Module({ imports:[MongooseModule.forFeature([{name:DomainDocument.name,schema:DomainSchema}])],controllers:[DomainController],providers:[DomainService,{provide:DomainRepositoryToken,useClass:MongooseDomainRepository}],exports:[DomainService] })
+import {
+  DomainDocument,
+  DomainSchema,
+} from '../../infrastructure/persistence/mongoose/domain.schema';
+import { MongooseDomainRepository } from '../../infrastructure/persistence/mongoose/mongoose-domain.repository';
+import { DomainController } from './domain.controller';
+import { DomainRepositoryToken } from './domain.interface';
+import { DomainService } from './domain.service';
+
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: DomainDocument.name, schema: DomainSchema },
+    ]),
+  ],
+  controllers: [DomainController],
+  providers: [
+    DomainService,
+    {
+      provide: DomainRepositoryToken,
+      useClass: MongooseDomainRepository,
+    },
+  ],
+})
 export class DomainModule {}
