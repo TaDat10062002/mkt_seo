@@ -340,6 +340,8 @@ MONGODB_MAX_POOL_SIZE=10
 MONGODB_MIN_POOL_SIZE=1
 
 CORS_ORIGINS=http://localhost:5173
+
+GOOGLE_TRENDING_API_KEY=your_serpapi_api_key
 ```
 
 Không commit file `.env` lên Git.
