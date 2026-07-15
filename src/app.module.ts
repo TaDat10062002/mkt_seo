@@ -10,10 +10,15 @@ import { DomainModule } from "./modules/domain/domain.module";
 import { KeywordModule } from "./modules/keyword/keyword.module";
 import { SubKeywordModule } from "./modules/sub-keyword/sub-keyword.module";
 import { TrendingModule } from "./modules/trending/trending.module";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30 * 60000,
+    }),
     DatabaseModule,
     CompanyModule,
     DomainModule,
